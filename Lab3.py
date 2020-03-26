@@ -94,6 +94,23 @@ class FractionalExperiment:
         Gp = max(s) / sum(s)
         return Gp, G_cr
 
+    #Перевірка на однорідність і додавання m+1 при неоднорідності
+      def check(self):
+        #Проведення статистичних перевірок
+        student = partial(t.ppf, q=1 - 0.025)
+        t_student = student(df=self.f3)
+
+        print('\nПеревірка за критерієм Кохрена')
+        Gp, G_kr = self.kohren()
+        print(f'Gp = {Gp}')
+        if Gp < G_kr:
+            print(f'З ймовірністю {1-self.q} дисперсії однорідні.')
+        else:
+            print("Необхідно збільшити кількість дослідів")
+            self.m += 1
+            FractionalExperiment(self.n, self.m)
+
+            
     def student(self):
         #Перевірка знащущості коефіцієнтів за критерієм Стьюдента
 
@@ -121,21 +138,7 @@ class FractionalExperiment:
         F_p = S_ad / S_kv_aver
         return F_p
 
-    def check(self):
-        #Проведення статистичних перевірок
-        student = partial(t.ppf, q=1 - 0.025)
-        t_student = student(df=self.f3)
-
-        print('\nПеревірка за критерієм Кохрена')
-        Gp, G_kr = self.kohren()
-        print(f'Gp = {Gp}')
-        if Gp < G_kr:
-            print(f'З ймовірністю {1-self.q} дисперсії однорідні.')
-        else:
-            print("Необхідно збільшити кількість дослідів")
-            self.m += 1
-            FractionalExperiment(self.n, self.m)
-
+  
         ts = self.student()
         print('\nПеревірка значущості коефіцієнтів за критерієм Стьюдента')
         print('Критерій Стьюдента:\n', ts)
