@@ -5,7 +5,7 @@ from scipy.stats import f, t
 from functools import partial
 from pyDOE2 import ccdesign
 
-
+x_new=[]
 x_range = ((0, 4), (0, 10), (-1, 7))
 
 x_aver_max = sum([x[1] for x in x_range]) / 3  # середнє Xmax
@@ -228,6 +228,10 @@ def check(X, Y, B, n, m):
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним')
+        for i in range(3):
+           for j in range(2):
+               Xn = x_range[i][j] * random.uniform(-1, 1)
+               x_new.append(Xn)
 
 
 def main(n, m):
